@@ -1,0 +1,11 @@
+services:
+  mysql-container:
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker/volume_mysql:/var/lib/mysql
+    container_name: src
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: integrador3
