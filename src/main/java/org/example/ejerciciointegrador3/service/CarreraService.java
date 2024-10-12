@@ -41,11 +41,19 @@ public class CarreraService {
         estudianteCarreraRepository.save(estudianteCarrera);
     }
 
+    public List<Object[]> obtenerCarrerasConEstudiantes() {
+        return carreraRepository.getCarrerasWithEstudiantesRegisted();
+    }
+
     public Optional<Carrera> getCarreraById(Long id) {
         return carreraRepository.findById(id);
     }
 
     public List<Object> generarReporteCarreras() {
         return carreraRepository.getReportCarrera();
+    }
+
+    public Carrera findById(Long id){
+        return carreraRepository.findById(id);
     }
 }

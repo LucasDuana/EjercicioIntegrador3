@@ -14,14 +14,15 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
     @Query("SELECT e FROM Estudiante e WHERE e.lu=:lu")
     public Optional<Estudiante> getEstudianteByLu(String lu);
 
-    @Query("SELECT e FROM Estudiante e ORDER BY  e.genero")
-    public List<Estudiante> getEstudiantesByGenero(String genero);
+    @Query("SELECT e FROM Estudiante e WHERE e.genero = :genero ORDER BY e.nombre ASC")
+    List<Estudiante> getEstudiantesByGenero(@Param("genero") String genero);
 
     @Query("SELECT e FROM Estudiante e ORDER BY e.nombre ASC")
     public List<Estudiante> getEstudiantesOrderByNombreAfter();
 
     @Query("SELECT e FROM Estudiante e JOIN EstudianteCarrera ec ON e.dni = ec.estudiante.dni WHERE ec.carrera.carreraId = :carreraId AND e.ciudad = :ciudad")
     List<Estudiante> getEstudianteByCarreraAndCiudad(@Param("carreraId") Long carreraId, @Param("ciudad") String ciudad);
+
     Optional<Estudiante> getEstudianteByDni(Long dni);
 
 }

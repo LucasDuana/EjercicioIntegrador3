@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Entity
 @Data
@@ -23,14 +25,14 @@ public class EstudianteCarrera {
     @JoinColumn(name = "carrera_id")
     private Carrera carrera;
 
-    private Integer inscripcion;
+    private Date inscripcion;
 
     private Integer graduacion;
 
     private Integer antiguedad;
 
 
-    public EstudianteCarrera(Long id,Carrera carrera, Estudiante estudiante, Integer inscripcion, Integer graduacion, Integer antiguedad) {
+    public EstudianteCarrera(Long id,Carrera carrera, Estudiante estudiante, Date inscripcion, Integer graduacion, Integer antiguedad) {
         this.carrera = carrera;
         this.estudiante = estudiante;
         this.inscripcion = inscripcion;
@@ -49,7 +51,7 @@ public class EstudianteCarrera {
         this.estudiante = estudiante;
     }
 
-    public void setInscripcion(Integer inscripcion) {
+    public void setInscripcion(Date inscripcion) {
         this.inscripcion = inscripcion;
     }
 

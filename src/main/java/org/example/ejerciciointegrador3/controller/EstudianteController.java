@@ -1,23 +1,30 @@
 package org.example.ejerciciointegrador3.controller;
 
+import org.example.ejerciciointegrador3.model.Carrera;
 import org.example.ejerciciointegrador3.model.Estudiante;
+import org.example.ejerciciointegrador3.model.EstudianteCarrera;
+import org.example.ejerciciointegrador3.service.CarreraService;
 import org.example.ejerciciointegrador3.service.EstudianteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/estudiantes")
 public class EstudianteController {
 
     @Autowired
     private EstudianteService estudianteService;
 
-    @GetMapping("/estudiantes")
+    @Autowired
+    private CarreraService carreraService;
+
+    @GetMapping("")
     public ResponseEntity<List<Estudiante>> obtenerEstudiantes() {
         List<Estudiante> estudiantes = estudianteService.obtenerTodosEstudiantes();
         if (estudiantes.isEmpty()) {
@@ -26,6 +33,10 @@ public class EstudianteController {
         return ResponseEntity.ok(estudiantes);
     }
 
+
+
+
+    //a) dar de alta un estudiante
     @PostMapping("/estudiantes")
     public ResponseEntity<?> save(@RequestBody Estudiante estudiante) {
         try {
@@ -36,8 +47,17 @@ public class EstudianteController {
         }
     }
 
-    @GetMapping("/genero/{genero}")
-    public ResponseEntity<List<Estudiante>> obtenerEstudiantesPorGenero(@PathVariable String genero) {
+    //d) recuperar un estudiante, en base a su número de libreta universitaria.
+    @GetMapping("/libreta/{lu}")
+    public ResponseEntity<Estudiante> obtenerEstudiantePorLU(@PathVariable String lu) {
+        Optional<Estudiante> estudiante = estudianteService.obtenerEstudiantePorLU(lu);
+        return estudiante.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    //e) recuperar todos los estudiantes, en base a su género.
+    @GetMapping("/genero")
+    public ResponseEntity<List<Estudiante>> obtenerEstudiantesPorGenero(@RequestParam String genero) {
         List<Estudiante> estudiantes = estudianteService.obtenerEstudiantesPorGenero(genero);
         if (estudiantes.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -45,10 +65,35 @@ public class EstudianteController {
         return ResponseEntity.ok(estudiantes);
     }
 
-    @GetMapping("/libreta/{lu}")
-    public ResponseEntity<Estudiante> obtenerEstudiantePorLU(@PathVariable String lu) {
-        Optional<Estudiante> estudiante = estudianteService.obtenerEstudiantePorLU(lu);
-        return estudiante.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    @GetMapping("/ordenados")
+    public List<Estudiante> obtenerEstudiantesOrdenados(@RequestParam(defaultValue = "nombre") String campoOrden) {
+        return estudianteService.obtenerEstudiantesOrdenadosPor(campoOrden);
     }
+
+    @PostMapping("/estudiante/{estudianteId}/carrera/{carreraId}")
+    public ResponseEntity<String> matricularEstudiante(@PathVariable Long estudianteId, @PathVariable Long carreraId) {
+        // Recuperar el estudiante y la carrera
+        Estudiante estudiante = estudianteService.findById(estudianteId);
+        Carrera carrera = carreraService.findById(carreraId);
+
+        // Validar que ambos existan
+        if (estudiante == null || carrera == null) {
+            return ResponseEntity.badRequest().body("Estudiante o carrera no encontrados");
+        }
+
+        // Crear la relación Estudiante-Carrera
+        EstudianteCarrera estudianteCarrera = new EstudianteCarrera();
+        estudianteCarrera.setEstudiante(estudiante);
+        estudianteCarrera.setCarrera(carrera);
+        estudianteCarrera.setInscripcion(LocalDate.now());
+
+        // Guardar la matrícula
+        estudianteCarreraRepository.save(estudianteCarrera);
+
+        return ResponseEntity.ok("Estudiante matriculado con éxito");
+    }
+
+
+
+
 }

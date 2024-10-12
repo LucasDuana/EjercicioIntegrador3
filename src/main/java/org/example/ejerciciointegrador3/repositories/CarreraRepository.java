@@ -9,10 +9,15 @@ import java.util.List;
 
 @Repository
 public interface CarreraRepository extends JpaRepository<Carrera, Long> {
-
-    @Query("SELECT c, COUNT(ec) FROM Carrera c JOIN EstudianteCarrera ec ON c.carrera_id = ec.carrera.carrera_id " +
+    /*
+    @Query("SELECT c, COUNT(ec) FROM Carrera c JOIN EstudianteCarrera ec ON c.carreraId = ec.carrera.carreraId " +
             "GROUP BY c ORDER BY COUNT(ec) DESC")
-    public List<Carrera> getCarrerasWithEstudiantesRegisted();
+    public List<Carrera> getCarrerasWithEstudiantesRegisted();*/
+
+    @Query("SELECT c, COUNT(ec) FROM Carrera c " +
+            "JOIN EstudianteCarrera ec ON c.carreraId = ec.carrera.carreraId " +
+            "GROUP BY c ORDER BY COUNT(ec) DESC")
+    List<Object[]> getCarrerasWithEstudiantesRegisted();
 
     @Query("SELECT c.carrera, ec.inscripcion AS anio, " +
             "SUM(CASE WHEN ec.graduacion = 0 THEN 1 ELSE 0 END) AS graduados, " +
@@ -23,5 +28,8 @@ public interface CarreraRepository extends JpaRepository<Carrera, Long> {
             "GROUP BY c.carrera, ec.inscripcion " +
             "HAVING COUNT(ec) > 0 " +
             "ORDER BY ec.inscripcion ASC, c.carrera ASC")
-    public List<Object> getReportCarrera();
+    List<Object> getReportCarrera();
+
+
+
 }
