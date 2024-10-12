@@ -12,51 +12,30 @@ public class Carrera {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long carrera_id;
-    @Column
+    private Long carreraId;
+    @Column(nullable = false)
     private String carrera;
-    @Column
+    @Column(nullable = false)
     private Integer duracion;
 
-    @OneToMany(mappedBy = "carrera")
-    private List<EstudianteCarrera> estudiantes;
+    @OneToMany(mappedBy = "carrera", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EstudianteCarrera> estudiantes = new ArrayList<>();
 
     public Carrera(String carrera, Integer duracion) {
         this.carrera = carrera;
         this.duracion = duracion;
-        this.estudiantes = new ArrayList<>();
     }
 
     public Carrera() {
-
+        // Constructor por defecto
     }
 
-    public Long getId_carrera() {
-        return carrera_id;
+    public Long getCarreraId() {
+        return carreraId;
     }
 
-
-    public String getCarrera() {
-        return carrera;
-    }
-
-    public void setCarrera(String carrera) {
-        this.carrera = carrera;
-    }
-
-    public Integer getDuracion() {
-        return duracion;
-    }
-
-    public void setDuracion(Integer duracion) {
-        this.duracion = duracion;
-    }
-
-    public List<EstudianteCarrera> getEstudiantes() {
-        return new ArrayList<>(estudiantes);
-    }
-
-    public void addEstudiante(EstudianteCarrera e){
-        this.estudiantes.add(e);
+    public void addEstudiante(EstudianteCarrera estudianteCarrera) {
+        this.estudiantes.add(estudianteCarrera);
+        estudianteCarrera.setCarrera(this);
     }
 }
