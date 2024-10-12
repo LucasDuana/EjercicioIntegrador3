@@ -24,4 +24,5 @@ public interface CarreraRepository extends JpaRepository<Carrera, Long> {
             "HAVING COUNT(ec) > 0 " +
             "ORDER BY ec.inscripcion ASC, c.carrera ASC")
     public List<Object> getReportCarrera();
+
 }
