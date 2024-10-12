@@ -18,8 +18,8 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
     @Query("SELECT e FROM Estudiante e ORDER BY e.nombre ASC")
     public List<Estudiante> getEstudiantesOrderByNombreAfter();
 
-    @Query("SELECT e FROM Estudiante e JOIN EstudianteCarrera ec ON e.dni = ec.estudiante.dni WHERE ec.carrera.carrera_id = :carreraId AND e.ciudad = :ciudad")
+    @Query("SELECT e FROM Estudiante e JOIN EstudianteCarrera ec ON e.dni = ec.estudiante.dni WHERE ec.carrera.carreraId = :carreraId AND e.ciudad = :ciudad")
     List<Estudiante> getEstudianteByCarreraAndCiudad(@Param("carreraId") Long carreraId, @Param("ciudad") String ciudad);
-
+    Optional<Estudiante> getEstudianteByDni(Long dni);
 
 }

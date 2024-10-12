@@ -1,6 +1,5 @@
 package org.example.ejerciciointegrador3.service;
 
-import jakarta.transaction.Transactional;
 import org.example.ejerciciointegrador3.model.Estudiante;
 import org.example.ejerciciointegrador3.repositories.EstudianteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +10,9 @@ import java.util.Optional;
 
 @Service
 public class EstudianteService {
+
     @Autowired
     private EstudianteRepository estudianteRepository;
-
 
     public List<Estudiante> obtenerTodosEstudiantes() {
         return estudianteRepository.findAll();
@@ -23,6 +22,11 @@ public class EstudianteService {
         return estudianteRepository.save(entity);
     }
 
+    public List<Estudiante> obtenerEstudiantesPorGenero(String genero) {
+        return estudianteRepository.getEstudiantesByGenero(genero);
+    }
 
-
+    public Optional<Estudiante> obtenerEstudiantePorLU(String lu) {
+        return estudianteRepository.getEstudianteByLu(lu);
+    }
 }
