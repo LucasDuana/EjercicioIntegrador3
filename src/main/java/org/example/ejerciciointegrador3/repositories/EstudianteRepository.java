@@ -25,4 +25,7 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
 
     Optional<Estudiante> getEstudianteByDni(Long dni);
 
+    @Query("SELECT e FROM Estudiante e JOIN EstudianteCarrera ec ON e.dni = ec.estudiante.dni WHERE ec.carrera.carreraId = :carreraId AND e.ciudad = :ciudad")
+    List<Estudiante> findEstudiantesByCarreraAndCiudad(@Param("carreraId") Long carreraId, @Param("ciudad") String ciudad);
+
 }

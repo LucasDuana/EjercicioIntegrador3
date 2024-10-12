@@ -2,7 +2,6 @@ package org.example.ejerciciointegrador3.controller;
 
 import org.example.ejerciciointegrador3.model.Carrera;
 import org.example.ejerciciointegrador3.model.Estudiante;
-import org.example.ejerciciointegrador3.model.EstudianteCarrera;
 import org.example.ejerciciointegrador3.service.CarreraService;
 import org.example.ejerciciointegrador3.service.EstudianteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +18,9 @@ public class EstudianteController {
 
     @Autowired
     private EstudianteService estudianteService;
+
+
+
 
     @Autowired
     private CarreraService carreraService;
@@ -33,11 +34,8 @@ public class EstudianteController {
         return ResponseEntity.ok(estudiantes);
     }
 
-
-
-
     //a) dar de alta un estudiante
-    @PostMapping("/estudiantes")
+    @PostMapping("")
     public ResponseEntity<?> save(@RequestBody Estudiante estudiante) {
         try {
             Estudiante nuevoEstudiante = estudianteService.crearEstudiante(estudiante);
@@ -65,12 +63,14 @@ public class EstudianteController {
         return ResponseEntity.ok(estudiantes);
     }
 
+    //c) recuperar todos los estudiantes, y especificar algún criterio de ordenamiento simp
     @GetMapping("/ordenados")
     public List<Estudiante> obtenerEstudiantesOrdenados(@RequestParam(defaultValue = "nombre") String campoOrden) {
         return estudianteService.obtenerEstudiantesOrdenadosPor(campoOrden);
     }
 
-    @PostMapping("/estudiante/{estudianteId}/carrera/{carreraId}")
+    //b matricular estudiante
+    @PostMapping("/{estudianteId}/carrera/{carreraId}")
     public ResponseEntity<String> matricularEstudiante(@PathVariable Long estudianteId, @PathVariable Long carreraId) {
         // Recuperar el estudiante y la carrera
         Estudiante estudiante = estudianteService.findById(estudianteId);
@@ -81,16 +81,17 @@ public class EstudianteController {
             return ResponseEntity.badRequest().body("Estudiante o carrera no encontrados");
         }
 
-        // Crear la relación Estudiante-Carrera
-        EstudianteCarrera estudianteCarrera = new EstudianteCarrera();
-        estudianteCarrera.setEstudiante(estudiante);
-        estudianteCarrera.setCarrera(carrera);
-        estudianteCarrera.setInscripcion(LocalDate.now());
-
-        // Guardar la matrícula
-        estudianteCarreraRepository.save(estudianteCarrera);
+        estudianteService.matricularEstudiante(estudiante,carrera);
 
         return ResponseEntity.ok("Estudiante matriculado con éxito");
+    }
+
+    //g) recuperar los estudiantes de una determinada carrera, filtrado por ciudad de residencia.
+    @GetMapping("/carrera/{carreraId}/ciudad/{ciudad}")
+    public ResponseEntity<List<Estudiante>> obtenerEstudiantesPorCarreraYCiudad(
+            @PathVariable Long carreraId, @PathVariable String ciudad) {
+        List<Estudiante> estudiantes = estudianteService.obtenerEstudiantesPorCarreraYCiudad(carreraId, ciudad);
+        return ResponseEntity.ok(estudiantes);
     }
 
 

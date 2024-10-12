@@ -9,6 +9,7 @@ import org.example.ejerciciointegrador3.repositories.EstudianteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +55,6 @@ public class CarreraService {
     }
 
     public Carrera findById(Long id){
-        return carreraRepository.findById(id);
+        return carreraRepository.findById(id).orElseThrow(null);
     }
 }

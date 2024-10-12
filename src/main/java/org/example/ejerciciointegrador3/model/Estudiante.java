@@ -1,5 +1,6 @@
 package org.example.ejerciciointegrador3.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -26,6 +27,7 @@ import java.util.List;
         private String lu;
 
         @OneToMany(mappedBy = "estudiante")
+        @JsonIgnore
         private List<EstudianteCarrera> carreras;
 
         public Estudiante() {

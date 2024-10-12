@@ -1,10 +1,12 @@
 package org.example.ejerciciointegrador3.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -25,14 +27,15 @@ public class EstudianteCarrera {
     @JoinColumn(name = "carrera_id")
     private Carrera carrera;
 
-    private Date inscripcion;
+    @Column( nullable = false)
+    private Integer inscripcion;
 
     private Integer graduacion;
 
     private Integer antiguedad;
 
 
-    public EstudianteCarrera(Long id,Carrera carrera, Estudiante estudiante, Date inscripcion, Integer graduacion, Integer antiguedad) {
+    public EstudianteCarrera(Long id,Carrera carrera, Estudiante estudiante, Integer inscripcion, Integer graduacion, Integer antiguedad) {
         this.carrera = carrera;
         this.estudiante = estudiante;
         this.inscripcion = inscripcion;
@@ -46,12 +49,11 @@ public class EstudianteCarrera {
 
     }
 
-
     public void setEstudiante(Estudiante estudiante) {
         this.estudiante = estudiante;
     }
 
-    public void setInscripcion(Date inscripcion) {
+    public void setInscripcion(Integer inscripcion) {
         this.inscripcion = inscripcion;
     }
 

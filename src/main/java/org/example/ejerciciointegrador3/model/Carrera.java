@@ -1,5 +1,6 @@
 package org.example.ejerciciointegrador3.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -19,6 +20,7 @@ public class Carrera {
     private Integer duracion;
 
     @OneToMany(mappedBy = "carrera", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<EstudianteCarrera> estudiantes = new ArrayList<>();
 
     public Carrera(String carrera, Integer duracion) {

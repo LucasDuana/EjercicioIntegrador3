@@ -20,4 +20,9 @@ public class CarreraController{
         return carreraService.obtenerCarrerasConEstudiantes();
     }
 
+    @GetMapping("/reporte")
+    public List<Object> obtenerCarreraReporte(){
+        return carreraService.generarReporteCarreras();
+    }
+
 }
