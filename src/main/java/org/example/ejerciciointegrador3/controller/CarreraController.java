@@ -1,5 +1,6 @@
 package org.example.ejerciciointegrador3.controller;
 
+import org.example.ejerciciointegrador3.dtos.ReporteCarreraDTO;
 import org.example.ejerciciointegrador3.service.CarreraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +22,7 @@ public class CarreraController{
     }
 
     @GetMapping("/reporte")
-    public List<Object> obtenerCarreraReporte(){
+    public List<ReporteCarreraDTO> obtenerCarreraReporte(){
         return carreraService.generarReporteCarreras();
     }
 

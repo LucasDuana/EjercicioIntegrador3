@@ -19,16 +19,13 @@ public interface CarreraRepository extends JpaRepository<Carrera, Long> {
             "GROUP BY c ORDER BY COUNT(ec) DESC")
     List<Object[]> getCarrerasWithEstudiantesRegisted();
 
-    @Query("SELECT c.carrera, ec.inscripcion AS anio, " +
-            "SUM(CASE WHEN ec.graduacion = 0 THEN 1 ELSE 0 END) AS graduados, " +
-            "COUNT(CASE WHEN ec.graduacion > 0 THEN 1 END) AS inscriptos " +
+    @Query("SELECT c.carrera, ec.inscripcion, ec.graduacion " +
             "FROM EstudianteCarrera ec " +
             "JOIN ec.carrera c " +
-            "WHERE ec.inscripcion IS NOT NULL " +
-            "GROUP BY c.carrera, ec.inscripcion " +
-            "HAVING COUNT(ec) > 0 " +
-            "ORDER BY ec.inscripcion ASC, c.carrera ASC")
-    List<Object> getReportCarrera();
+            "ORDER BY c.carrera ASC, ec.inscripcion ASC")
+    List<Object[]> obtenerDatosCarreras();
+
+
 
 
 
