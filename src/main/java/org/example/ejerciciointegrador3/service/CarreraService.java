@@ -10,7 +10,6 @@ import org.example.ejerciciointegrador3.repositories.EstudianteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -54,7 +53,6 @@ public class CarreraService {
         List<Object[]> datos = carreraRepository.obtenerDatosCarreras();
         Map<String, Map<Integer, int[]>> reporte = new HashMap<>();
 
-        // Procesar los resultados
         for (Object[] fila : datos) {
             String carrera = (String) fila[0];
             Integer inscripcion = (Integer) fila[1];
@@ -62,34 +60,37 @@ public class CarreraService {
 
             reporte.computeIfAbsent(carrera, k -> new HashMap<>());
 
-            Map<Integer, int[]> años = reporte.get(carrera);
-            años.computeIfAbsent(inscripcion, k -> new int[2]);
+            Map<Integer, int[]> anios= reporte.get(carrera);
+            anios.computeIfAbsent(inscripcion, k -> new int[2]);
 
-            años.get(inscripcion)[0]++;
+            anios.get(inscripcion)[0]++;
             if (graduacion != null) {
                 if (graduacion.equals(inscripcion)) {
-                    años.get(inscripcion)[1]++;
+                    anios.get(inscripcion)[1]++;
                 } else {
-                    años.computeIfAbsent(graduacion, k -> new int[2])[1]++;
+                    anios.computeIfAbsent(graduacion, k -> new int[2])[1]++;
                 }
             }
         }
 
+        return getReporteCarreraDTOS(reporte);
+    }
+
+    private  List<ReporteCarreraDTO> getReporteCarreraDTOS(Map<String, Map<Integer, int[]>> reporte) {
         List<ReporteCarreraDTO> resultado = new ArrayList<>();
         for (Map.Entry<String, Map<Integer, int[]>> entry : reporte.entrySet()) {
             String carrera = entry.getKey();
-            for (Map.Entry<Integer, int[]> añoEntry : entry.getValue().entrySet()) {
-                Integer año = añoEntry.getKey();
-                int graduados = añoEntry.getValue()[1];
-                int inscriptos = añoEntry.getValue()[0];
+            for (Map.Entry<Integer, int[]> aniosEntry : entry.getValue().entrySet()) {
+                Integer anios = aniosEntry.getKey();
+                int graduados = aniosEntry.getValue()[1];
+                int inscriptos = aniosEntry.getValue()[0];
 
-                if (año != 0) {
-                    ReporteCarreraDTO dto = new ReporteCarreraDTO(carrera, año, graduados, inscriptos);
+                if (anios!= 0) {
+                    ReporteCarreraDTO dto = new ReporteCarreraDTO(carrera, anios, graduados, inscriptos);
                     resultado.add(dto);
                 }
             }
         }
-
         return resultado;
     }
 
