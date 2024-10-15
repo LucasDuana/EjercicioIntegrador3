@@ -91,6 +91,10 @@ public class EstudianteController {
     public ResponseEntity<List<Estudiante>> obtenerEstudiantesPorCarreraYCiudad(
             @PathVariable Long carreraId, @PathVariable String ciudad) {
         List<Estudiante> estudiantes = estudianteService.obtenerEstudiantesPorCarreraYCiudad(carreraId, ciudad);
+        if (estudiantes.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Devolver 404 si no hay estudiantes
+        }
+
         return ResponseEntity.ok(estudiantes);
     }
 
