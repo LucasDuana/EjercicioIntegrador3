@@ -51,14 +51,14 @@ estudiante_carrera
 
 ## Documentación de Endpoints
 
-Esta sección detalla la implementación de los endpoints de la API REST del sistema de registro de estudiantes.
+Esta sección detalla la implementación de los endpoints de la API REST del sistema requeridos para el trabajo practico integrador 3.
 
-### 1. Estudiantes
+### 1. Estudiantes "/estudiantes"
 
 #### 1.1 Obtener todos los estudiantes
 
 - **Método**: `GET`
-- **Ruta**: `/estudiantes`
+- **Ruta**: ``
 - **Descripción**: Obtiene una lista de todos los estudiantes registrados en el sistema.
 - **Respuesta**:
    - **Código 200 OK**: Retorna una lista de objetos `Estudiante`.
@@ -66,7 +66,7 @@ Esta sección detalla la implementación de los endpoints de la API REST del sis
 #### 1.2 Crear un nuevo estudiante
 
 - **Método**: `POST`
-- **Ruta**: `/estudiantes`
+- **Ruta**: ``
 - **Descripción**: Registra un nuevo estudiante en el sistema.
 - **Cuerpo de la solicitud**:
   ```json
@@ -80,7 +80,11 @@ Esta sección detalla la implementación de los endpoints de la API REST del sis
       "lu": "12345"
   }
   
-Utilizando (1.1) se puede corroborar el alta de un nuevo estudiante.
+#### 1.3 Matricular un estudiante a una carrera
+- **Método**: `POST`
+- **Ruta**: `/{estudianteId}/carrera/{carreraId}`
+  **Ejemplo**: `http://localhost:8080/estudiantes/90123456/carrera/2` Inscribiria a tomas Diaz a tudai
+
 
 #### 1.3 Obtener estudiantes mediante algun criterio de ordenamiento simple
 
@@ -97,6 +101,7 @@ Utilizando (1.1) se puede corroborar el alta de un nuevo estudiante.
 - **Ruta**: `/libreta/{lu}`
 - - **Respuesta**:
 - **Código 200 OK**: Retorna unobjeto `Estudiante` con dicho LU.
+- **Código 404 Not Found**: No se encuentra dicho estudiante con tal LU
 
 **Ejemplo**: `http://localhost:8080/estudiantes/libreta/LU9101` Traeria a Lucas Fernandez
 
@@ -133,10 +138,15 @@ Utilizando (1.1) se puede corroborar el alta de un nuevo estudiante.
       "duracion":4
   }
 
-- - **Respuesta**:
+- **Respuesta**:
 - **Código 200 OK**: Se crea la carrera 
 
 #### 2.2 Recuperar las carreras con estudiantes inscriptos, y ordenar por cantidad de inscriptos.
 - **Método**: `GET`
 - **Ruta**: `/con-estudiantes`
 
+#### 2.3 generar un reporte de las carreras, que para cada carrera incluya información de los inscriptos y egresados por año. Se deben ordenar las carreras alfabéticamente, y presentar los años de manera cronológica.
+- **Método**: `GET`
+- **Ruta**: `/reporte`
+- **Respuesta**:
+  **Código 200 OK**: Se retorna una lista de info de cada carrera por año con la cantidad de inscriptos y grauados
