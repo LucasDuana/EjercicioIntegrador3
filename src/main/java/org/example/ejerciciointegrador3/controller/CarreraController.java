@@ -4,6 +4,7 @@ import org.example.ejerciciointegrador3.dtos.ReporteCarreraDTO;
 import org.example.ejerciciointegrador3.model.Carrera;
 import org.example.ejerciciointegrador3.service.CarreraService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,6 +49,12 @@ public class CarreraController{
     public ResponseEntity<Void> eliminarCarrera(@PathVariable Long id) {
         carreraService.eliminarCarrera(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<Carrera> crearCarrera(@RequestBody Carrera nuevaCarrera) {
+        Carrera carreraCreada = carreraService.crearCarrera(nuevaCarrera);
+        return new ResponseEntity<>(carreraCreada, HttpStatus.CREATED);
     }
 
 }

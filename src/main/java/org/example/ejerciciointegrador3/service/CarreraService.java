@@ -138,6 +138,10 @@ public class CarreraService {
         return resultado;
     }
 
+    public Carrera crearCarrera(Carrera nuevaCarrera) {
+        return carreraRepository.save(nuevaCarrera);
+    }
+
     public Carrera findById(Long id) {
         try {
             return carreraRepository.findById(id)

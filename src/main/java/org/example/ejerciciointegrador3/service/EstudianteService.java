@@ -67,7 +67,22 @@ public class EstudianteService {
                 .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
     }
 
+    public Estudiante actualizarEstudiante(Long id, Estudiante detallesEstudiante) {
+        Estudiante estudiante = estudianteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
 
+        // Actualiza los campos del estudiante
+        estudiante.setNombre(detallesEstudiante.getNombre());
+        estudiante.setApellido(detallesEstudiante.getApellido());
+        estudiante.setEdad(detallesEstudiante.getEdad());
+        estudiante.setGenero(detallesEstudiante.getGenero());
+        estudiante.setDni(detallesEstudiante.getDni());
+        estudiante.setCiudad(detallesEstudiante.getCiudad());
+        estudiante.setLu(detallesEstudiante.getLu());
+        // Agrega otros campos que necesites actualizar
+
+        return estudianteRepository.save(estudiante);
+    }
 
     @Transactional
     public void matricularEstudiante(Estudiante estudiante, Carrera carrera) {
@@ -80,6 +95,13 @@ public class EstudianteService {
         } catch (Exception e) {
             throw new RuntimeException("No se pudo matricular al alumno",e);
         }
+    }
+
+    public void eliminarEstudiante(Long id) {
+        Estudiante estudiante = estudianteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
+
+        estudianteRepository.delete(estudiante);
     }
 
     public List<Estudiante> obtenerEstudiantesPorCarreraYCiudad(Long carreraId, String ciudad) {

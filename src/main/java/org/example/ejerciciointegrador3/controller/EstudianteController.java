@@ -26,13 +26,25 @@ public class EstudianteController {
     @Autowired
     private CarreraService carreraService;
 
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<List<Estudiante>> obtenerEstudiantes() {
         List<Estudiante> estudiantes = estudianteService.obtenerTodosEstudiantes();
         if (estudiantes.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(estudiantes);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarEstudiante(@PathVariable Long id) {
+        estudianteService.eliminarEstudiante(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Estudiante> actualizarEstudiante(@PathVariable Long id, @RequestBody Estudiante detallesEstudiante) {
+        Estudiante estudianteActualizado = estudianteService.actualizarEstudiante(id, detallesEstudiante);
+        return new ResponseEntity<>(estudianteActualizado, HttpStatus.OK);
     }
 
     //a) dar de alta un estudiante
