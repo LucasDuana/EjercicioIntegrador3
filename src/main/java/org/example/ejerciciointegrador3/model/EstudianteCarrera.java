@@ -27,7 +27,6 @@ public class EstudianteCarrera {
     @JoinColumn(name = "carrera_id")
     private Carrera carrera;
 
-    @Column( nullable = false)
     private Integer inscripcion;
 
     private Integer graduacion;
@@ -64,4 +63,9 @@ public class EstudianteCarrera {
     public void setAntiguedad(Integer antiguedad) {
         this.antiguedad = antiguedad;
     }
+
+    public void setCarrera(Carrera carrera) {
+        this.carrera = carrera;
+    }
+
 }
