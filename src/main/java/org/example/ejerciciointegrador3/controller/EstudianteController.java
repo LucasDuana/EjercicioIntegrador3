@@ -37,12 +37,8 @@ public class EstudianteController {
     //a) dar de alta un estudiante
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody Estudiante estudiante) {
-        try {
             Estudiante nuevoEstudiante = estudianteService.crearEstudiante(estudiante);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevoEstudiante);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar un nuevo estudiante: " + e.getMessage());
-        }
     }
 
     //d) recuperar un estudiante, en base a su número de libreta universitaria.

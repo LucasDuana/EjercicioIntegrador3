@@ -1,5 +1,6 @@
 package org.example.ejerciciointegrador3.service;
 
+import jakarta.transaction.Transactional;
 import org.example.ejerciciointegrador3.model.Carrera;
 import org.example.ejerciciointegrador3.model.Estudiante;
 import org.example.ejerciciointegrador3.model.EstudianteCarrera;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,45 +22,69 @@ public class EstudianteService {
     private EstudianteCarreraRepository estudianteCarreraRepository;
 
     public List<Estudiante> obtenerTodosEstudiantes() {
-        return estudianteRepository.findAll();
+        try {
+            return estudianteRepository.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener todos los estudiantes", e);
+        }
     }
 
     public Estudiante crearEstudiante(Estudiante entity) {
-        return estudianteRepository.save(entity);
+        try {
+            return estudianteRepository.save(entity);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al crear estudiante", e);
+        }
     }
 
     public List<Estudiante> obtenerEstudiantesPorGenero(String genero) {
-        return estudianteRepository.getEstudiantesByGenero(genero);
+        try {
+            return estudianteRepository.getEstudiantesByGenero(genero);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener estudiantes por género", e);
+        }
     }
 
     public Optional<Estudiante> obtenerEstudiantePorLU(String lu) {
-        return estudianteRepository.getEstudianteByLu(lu);
+        try {
+            return estudianteRepository.getEstudianteByLu(lu);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener estudiante por LU", e);
+        }
     }
 
     public List<Estudiante> obtenerEstudiantesOrdenadosPor(String campoOrden) {
-        return estudianteRepository.findAll(Sort.by(Sort.Direction.ASC, campoOrden));
+        try {
+            return estudianteRepository.findAll(Sort.by(Sort.Direction.ASC, campoOrden));
+        } catch (Exception e) {
+            throw new RuntimeException("Error al ordenar estudiantes por " + campoOrden, e);
+        }
     }
 
-    public Estudiante findById(Long id){
-        return estudianteRepository.findById(id).orElseThrow(null);
+    public Estudiante findById(Long id) {
+        return estudianteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
     }
 
-    public String matricularEstudiante(Estudiante estudiante,Carrera carrera) {
+    @Transactional
+    public void matricularEstudiante(Estudiante estudiante, Carrera carrera) {
+        try {
+            EstudianteCarrera estudianteCarrera = new EstudianteCarrera();
+            estudianteCarrera.setEstudiante(estudiante);
+            estudianteCarrera.setCarrera(carrera);
 
-
-        EstudianteCarrera estudianteCarrera = new EstudianteCarrera();
-        estudianteCarrera.setEstudiante(estudiante);
-        estudianteCarrera.setCarrera(carrera);
-
-
-        estudianteCarreraRepository.save(estudianteCarrera);
-
-        return "Estudiante matriculado con éxito";
+            estudianteCarreraRepository.save(estudianteCarrera);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al matricular estudiante en carrera", e);
+        }
     }
-
 
     public List<Estudiante> obtenerEstudiantesPorCarreraYCiudad(Long carreraId, String ciudad) {
-        return estudianteRepository.findEstudiantesByCarreraAndCiudad(carreraId, ciudad);
+        try {
+            return estudianteRepository.findEstudiantesByCarreraAndCiudad(carreraId, ciudad);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener estudiantes por carrera y ciudad", e);
+        }
     }
 
 }
