@@ -8,7 +8,9 @@ import org.example.ejerciciointegrador3.repositories.CarreraRepository;
 import org.example.ejerciciointegrador3.repositories.EstudianteCarreraRepository;
 import org.example.ejerciciointegrador3.repositories.EstudianteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
@@ -61,6 +63,10 @@ public class CarreraService {
         }
     }
 
+    public List<Carrera> obtenerTodasLasCarreras() {
+        return carreraRepository.findAll();
+    }
+
     public List<ReporteCarreraDTO> generarReporteCarreras() {
         try {
             List<Object[]> datos = carreraRepository.obtenerDatosCarreras();
@@ -90,6 +96,28 @@ public class CarreraService {
         } catch (Exception e) {
             throw new RuntimeException("Error generando el reporte de carreras: " + e.getMessage());
         }
+    }
+
+    public Carrera obtenerCarreraPorId(Long id) {
+        return carreraRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Carrera no encontrada"));
+    }
+
+    public Carrera actualizarCarrera(Long id, Carrera detallesCarrera) {
+        Carrera carrera = carreraRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Carrera no encontrada"));
+
+        carrera.setCarrera(detallesCarrera.getCarrera());
+        carrera.setDuracion(detallesCarrera.getDuracion());
+
+        return carreraRepository.save(carrera);
+    }
+
+    public void eliminarCarrera(Long id) {
+        Carrera carrera = carreraRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Carrera no encontrada"));
+
+        carreraRepository.delete(carrera);
     }
 
     private List<ReporteCarreraDTO> getReporteCarreraDTOS(Map<String, Map<Integer, int[]>> reporte) {

@@ -66,6 +66,8 @@ public class EstudianteService {
                 .orElseThrow(() -> new RuntimeException("Estudiante no encontrado con ID: " + id));
     }
 
+
+
     @Transactional
     public void matricularEstudiante(Estudiante estudiante, Carrera carrera) {
         try {

@@ -1,5 +1,6 @@
 package org.example.ejerciciointegrador3.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.ejerciciointegrador3.model.Carrera;
 import org.example.ejerciciointegrador3.model.Estudiante;
 import org.example.ejerciciointegrador3.service.CarreraService;
@@ -64,6 +65,8 @@ public class EstudianteController {
     public List<Estudiante> obtenerEstudiantesOrdenados(@RequestParam(defaultValue = "nombre") String campoOrden) {
         return estudianteService.obtenerEstudiantesOrdenadosPor(campoOrden);
     }
+
+
 
     //b matricular estudiante
     @PostMapping("/{estudianteId}/carrera/{carreraId}")

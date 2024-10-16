@@ -13,6 +13,11 @@ public class CarreraDTO {
     @NotNull(message = "La duración es obligatoria")
     private Integer duracion;
 
+    public CarreraDTO(String carrera, Integer duracion) {
+        this.carrera = carrera;
+        this.duracion = duracion;
+    }
+
     // Getters y Setters
     public String getCarrera() {
         return carrera;
